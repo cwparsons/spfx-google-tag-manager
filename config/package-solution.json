@@ -3,7 +3,7 @@
   "solution": {
     "name": "Google Tag Manager extension",
     "id": "42f8713a-93a5-410c-8a0b-c61e8a7e1c04",
-    "version": "1.0.0.0",
+    "version": "0.1.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -21,7 +21,10 @@
         "id": "6ea1b240-ae1f-405a-af9f-5b398fcf7fd7",
         "version": "1.0.0.0",
         "assets": {
-          "elementManifests": ["elements.xml", "ClientSideInstance.xml"]
+          "elementManifests": [
+            "elements.xml",
+            "ClientSideInstance.xml"
+          ]
         }
       }
     ]
