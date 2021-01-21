@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="GoogleTagManager"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="6dbea502-eda8-4c1a-b3c3-734fe5860561"
+        ClientSideComponentProperties="{&quot;containerId&quot;:&quot;&quot;}">
+    </CustomAction>
+</Elements>
