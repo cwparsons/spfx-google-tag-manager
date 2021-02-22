@@ -22,10 +22,6 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
   public async onInit() {
     Log.info(LOG_SOURCE, `Initialized Google Tag Manager application customizer.`);
 
-    if (window['google_tag_manager']) {
-      Log.info(LOG_SOURCE, `Google Tag Manager has already been initialized once on this page.`, this.context.serviceScope);
-    }
-
     if (!this.properties.containerId) {
       Log.error(
         LOG_SOURCE,
@@ -36,22 +32,23 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
       return;
     }
 
-    // Set up the data layer variable.
-    window.dataLayer = window.dataLayer || [];
-
     // Create a custom event on page navigation for Google Tag Manager to create a
-    // virtual pageview tag against this trigger.
+    // virtual page view tag against this trigger.
     this.context.application.navigatedEvent.add(this, this.onNavigatedEvent);
-    this.context.placeholderProvider.changedEvent.add(this, this.onNavigatedEvent);
 
-    // Add Google Tag Manager
-    const script = this.createGtagScript(this.properties.containerId);
-    document.head.appendChild(script);
+    // If Google Tag Manager is not yet loaded on the page...
+    if (!window['google_tag_manager']) {
+      // Set up the data layer variable.
+      window.dataLayer = window.dataLayer || [];
+
+      // Add the script to the page.
+      const script = this.createGtagScript(this.properties.containerId);
+      document.head.appendChild(script);
+    }
   }
 
   @override
   public onDispose() {
-    this.context.application.navigatedEvent.remove(this, this.onNavigatedEvent);
     this.context.application.navigatedEvent.remove(this, this.onNavigatedEvent);
   }
 
