@@ -3,16 +3,12 @@ const fs = require('fs');
 
 const solutionConfigPath = './config/package-solution.json';
 
-// Check if the version number gets passed in the third option
-if (process.argv.length < 4) {
-  console.log('ERROR: No version have been passed in.');
-  process.exit(1);
-}
+const nextPkgVersion = process.env.npm_package_version;
+console.log(`Next version: ${nextPkgVersion}`);
 
 // Get the version passed in as argument
-const nextVersion = isNaN(parseFloat(process.argv[2])) ? process.argv[3] : process.argv[2].split('-')[0];
-
-// Require filesystem instance
+const nextVersion = nextPkgVersion.indexOf('-') === -1 ?
+    nextPkgVersion : nextPkgVersion.split('-')[0];
 
 // Read package-solution file
 const solutionFileContent = fs.readFileSync(solutionConfigPath, 'UTF-8');
