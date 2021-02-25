@@ -15,9 +15,7 @@ interface IGoogleTagManagerApplicationCustomizerProperties {
 }
 
 /** A Custom Action which can be run during execution of a Client Side Application */
-export default class GoogleTagManagerApplicationCustomizer extends BaseApplicationCustomizer<
-  IGoogleTagManagerApplicationCustomizerProperties
-> {
+export default class GoogleTagManagerApplicationCustomizer extends BaseApplicationCustomizer<IGoogleTagManagerApplicationCustomizerProperties> {
   @override
   public async onInit() {
     Log.info(LOG_SOURCE, `Initialized Google Tag Manager application customizer.`);
@@ -32,10 +30,6 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
       return;
     }
 
-    // Create a custom event on page navigation for Google Tag Manager to create a
-    // virtual page view tag against this trigger.
-    this.context.application.navigatedEvent.add(this, this.onNavigatedEvent);
-
     // If Google Tag Manager is not yet loaded on the page...
     if (!window['google_tag_manager']) {
       // Set up the data layer variable.
@@ -45,6 +39,10 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
       const script = this.createGtagScript(this.properties.containerId);
       document.head.appendChild(script);
     }
+
+    // Create a custom event on page navigation for Google Tag Manager to create a
+    // virtual page view tag against this trigger.
+    this.context.application.navigatedEvent.add(this, this.onNavigatedEvent);
   }
 
   @override
