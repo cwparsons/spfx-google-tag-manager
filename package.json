@@ -13,7 +13,6 @@
     "dev": "gulp clean && gulp bundle && gulp package-solution",
     "dist": "gulp clean --ship && gulp bundle --ship && gulp package-solution --ship",
     "package-solution": "gulp package-solution",
-    "postversion": "git push && git push --tags",
     "prettier": "prettier --write {config,src}/**/*",
     "preversion": "node ./scripts/preversion.js $npm_package_version %npm_package_version% && git add .",
     "serve:browser": "gulp serve",
