@@ -1,6 +1,7 @@
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer } from '@microsoft/sp-application-base';
 import { Log } from '@microsoft/sp-core-library';
+import sha256 from 'crypto-js/sha256';
 
 const LOG_SOURCE = 'GoogleTagManagerApplicationCustomizer';
 
@@ -12,6 +13,8 @@ declare global {
 
 interface IGoogleTagManagerApplicationCustomizerProperties {
   containerId: string;
+  enableUserId: boolean;
+  enableUserIdEncryption: boolean;
 }
 
 /** A Custom Action which can be run during execution of a Client Side Application */
@@ -38,6 +41,9 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
       // Add the script to the page.
       const script = this.createGtagScript(this.properties.containerId);
       document.head.appendChild(script);
+
+      // Session-scoped dimensions
+      await this.sendUserId();
     }
 
     // Create a custom event on page navigation for Google Tag Manager to create a
@@ -66,6 +72,24 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
     window.dataLayer.push({
       event: 'NavigatedEvent',
       url: `${window.location.pathname}${window.location.search}`
+    });
+  }
+
+  private async sendUserId() {
+    if (!this.properties.enableUserId) {
+      return;
+    }
+
+    let userId = this.context.pageContext.aadInfo.userId.toString();
+
+    if (this.properties.enableUserIdEncryption) {
+      const tenantId = this.context.pageContext.aadInfo.tenantId.toString();
+
+      userId = sha256(`${tenantId}_${userId}`).toString();
+    }
+
+    window.dataLayer.push({
+      userId
     });
   }
 }

@@ -24,7 +24,8 @@
   "dependencies": {
     "@microsoft/decorators": "1.11.0",
     "@microsoft/sp-application-base": "1.11.0",
-    "@microsoft/sp-core-library": "1.11.0"
+    "@microsoft/sp-core-library": "1.11.0",
+    "crypto-js": "^4.0.0"
   },
   "devDependencies": {
     "@microsoft/rush-stack-compiler-3.9": "0.4.38",
