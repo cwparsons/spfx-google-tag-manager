@@ -1,12 +1,12 @@
 import { override } from '@microsoft/decorators';
 import { BaseApplicationCustomizer } from '@microsoft/sp-application-base';
 import { Log } from '@microsoft/sp-core-library';
-import sha256 from 'crypto-js/sha256';
 
 const LOG_SOURCE = 'GoogleTagManagerApplicationCustomizer';
 
 declare global {
   interface Window {
+    google_tag_manager: any;
     dataLayer: any[];
   }
 }
@@ -20,7 +20,7 @@ interface IGoogleTagManagerApplicationCustomizerProperties {
 /** A Custom Action which can be run during execution of a Client Side Application */
 export default class GoogleTagManagerApplicationCustomizer extends BaseApplicationCustomizer<IGoogleTagManagerApplicationCustomizerProperties> {
   @override
-  public async onInit() {
+  public async onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized Google Tag Manager application customizer.`);
 
     if (!this.properties.containerId) {
@@ -34,7 +34,7 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
     }
 
     // If Google Tag Manager is not yet loaded on the page...
-    if (!window['google_tag_manager']) {
+    if (!window.google_tag_manager) {
       // Set up the data layer variable.
       window.dataLayer = window.dataLayer || [];
 
@@ -52,11 +52,11 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
   }
 
   @override
-  public onDispose() {
+  public onDispose(): void {
     this.context.application.navigatedEvent.remove(this, this.onNavigatedEvent);
   }
 
-  private createGtagScript(containerId: string) {
+  private createGtagScript(containerId: string): HTMLScriptElement {
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.innerHTML = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -68,14 +68,14 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
     return script;
   }
 
-  private onNavigatedEvent() {
+  private onNavigatedEvent(): void {
     window.dataLayer.push({
       event: 'NavigatedEvent',
       url: `${window.location.pathname}${window.location.search}`
     });
   }
 
-  private async sendUserId() {
+  private async sendUserId(): Promise<void> {
     if (!this.properties.enableUserId) {
       return;
     }
@@ -85,7 +85,10 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
     if (this.properties.enableUserIdEncryption) {
       const tenantId = this.context.pageContext.aadInfo.tenantId.toString();
 
-      userId = sha256(`${tenantId}_${userId}`).toString();
+      const encoder = new TextEncoder();
+      const data = encoder.encode(`${tenantId}_${userId}`);
+
+      userId = await crypto.subtle.digest('SHA-256', data);
     }
 
     window.dataLayer.push({

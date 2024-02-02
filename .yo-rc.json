@@ -1,6 +1,11 @@
 {
   "@microsoft/generator-sharepoint": {
     "isCreatingSolution": true,
+    "nodeVersion": "18.19.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.12.0"
+    },
     "environment": "spo",
     "version": "1.11.0",
     "libraryName": "spfx-google-tag-manager",

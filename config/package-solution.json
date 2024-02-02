@@ -21,10 +21,7 @@
         "id": "6ea1b240-ae1f-405a-af9f-5b398fcf7fd7",
         "version": "1.0.0.0",
         "assets": {
-          "elementManifests": [
-            "elements.xml",
-            "ClientSideInstance.xml"
-          ]
+          "elementManifests": ["elements.xml", "ClientSideInstance.xml"]
         }
       }
     ]

@@ -14,26 +14,24 @@
     "dist": "gulp clean --ship && gulp bundle --ship && gulp package-solution --ship",
     "package-solution": "gulp package-solution",
     "prettier": "prettier --write {config,src}/**/*",
-    "preversion": "node ./scripts/preversion.js $npm_package_version %npm_package_version% && git add .",
-    "serve:browser": "gulp serve",
-    "serve": "gulp serve --nobrowser",
-    "version-major": "npm version major -m \"Major version bump to %s\"",
-    "version-minor": "npm version minor -m \"Minor version bump to %s\"",
-    "version-patch": "npm version patch -m \"Patch version bump to %s\""
+    "serve": "gulp serve --nobrowser"
   },
   "dependencies": {
-    "@microsoft/decorators": "1.11.0",
-    "@microsoft/sp-application-base": "1.11.0",
-    "@microsoft/sp-core-library": "1.11.0",
-    "crypto-js": "^4.0.0"
+    "@microsoft/decorators": "1.18.2",
+    "@microsoft/sp-application-base": "1.18.2",
+    "@microsoft/sp-core-library": "1.18.2"
   },
   "devDependencies": {
-    "@microsoft/rush-stack-compiler-3.9": "0.4.38",
-    "@microsoft/sp-build-web": "1.11.0",
+    "@microsoft/eslint-config-spfx": "1.18.2",
+    "@microsoft/eslint-plugin-spfx": "1.18.2",
+    "@microsoft/rush-stack-compiler-4.7": "0.1.0",
+    "@microsoft/sp-build-web": "1.18.2",
+    "@rushstack/eslint-config": "3.6.2",
+    "@types/crypto-js": "4.2.2",
     "@types/es6-promise": "0.0.33",
-    "@types/webpack-env": "1.16.0",
-    "gulp": "3.9.1",
-    "tslint": "6.1.3",
-    "typescript": "3.9.7"
+    "@types/webpack-env": "1.18.4",
+    "eslint": "8.56.0",
+    "gulp": "4.0.2",
+    "typescript": "5.3.3"
   }
 }
