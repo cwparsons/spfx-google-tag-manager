@@ -41,13 +41,15 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
       // Set up the data layer variable and seed it the same way the standard GTM
       // snippet does, before the container script itself is loaded.
       window.dataLayer = window.dataLayer || [];
+
+      // Session-scoped dimensions. Pushed before `gtm.js` so the value is already in
+      // the data layer when tags firing on initialization or page view read it.
+      await this.sendUserId();
+
       window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
 
       // See: https://learn.microsoft.com/en-us/sharepoint/dev/spfx/content-securty-policy-trusted-script-sources
       await SPComponentLoader.loadScript(`https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(this.properties.containerId)}`);
-
-      // Session-scoped dimensions
-      await this.sendUserId();
     }
 
     // Create a custom event on page navigation for Google Tag Manager to create a
@@ -96,8 +98,13 @@ export default class GoogleTagManagerApplicationCustomizer extends BaseApplicati
 
       const encoder = new TextEncoder();
       const data = encoder.encode(`${tenantId}_${userId}`);
+      const digest = await crypto.subtle.digest('SHA-256', data);
 
-      userId = await crypto.subtle.digest('SHA-256', data);
+      // Convert the digest to a hex string. Pushing the raw ArrayBuffer serializes
+      // to the same value for every user, which collapses them into one in Google Analytics.
+      userId = Array.from(new Uint8Array(digest))
+        .map((byte) => `0${byte.toString(16)}`.slice(-2))
+        .join('');
     }
 
     window.dataLayer.push({
