@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.1] - 2026-11-24
+
+### Fixed
+
+- Fixed version numbering within SharePoint package.
+
 ## [0.7.0] - 2026-10-15
 
 ### Fixed
